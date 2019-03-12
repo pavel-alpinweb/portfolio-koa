@@ -1,3 +1,7 @@
 module.exports.render = async (ctx, next) => {
-  ctx.render("pages/admin");
+  if (ctx.session.isAuth == true) {
+    ctx.render("pages/admin");
+  } else {
+    ctx.redirect("/login");
+  }
 };

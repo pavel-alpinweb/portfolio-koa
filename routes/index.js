@@ -9,4 +9,6 @@ router.get("/", ctrlHome.render);
 router.get("/login", ctrlLogin.render);
 router.get("/admin", ctrlAdmin.render);
 
+router.post("/login", koaBody(), ctrlLogin.auth);
+
 module.exports = router;
