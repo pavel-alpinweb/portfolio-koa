@@ -64,6 +64,19 @@
       "src": "./upload/20161212_183252.jpg",
       "name": "Имя",
       "price": "1000"
+    },
+    {
+      "src": "upload\\uefa-euro-logo-png_101190 (2).png",
+      "price": "6000"
+    },
+    {
+      "src": "upload\\uefa-euro-logo-png_101190.png",
+      "price": "8000"
+    },
+    {
+      "src": "upload\\uefa-euro-logo-png_101190 (2).png",
+      "name": "имя",
+      "price": "3000"
     }
   ],
   "skills": [

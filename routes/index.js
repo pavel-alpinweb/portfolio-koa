@@ -11,5 +11,15 @@ router.get("/admin", ctrlAdmin.render);
 
 router.post("/login", koaBody(), ctrlLogin.auth);
 router.post("/admin/skills", koaBody(), ctrlAdmin.updateSkills);
+router.post(
+  "/admin/upload",
+  koaBody({
+    multipart: true,
+    formidable: {
+      uploadDir: process.cwd() + "/public/upload"
+    }
+  }),
+  ctrlAdmin.upload
+);
 
 module.exports = router;
