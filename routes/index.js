@@ -22,4 +22,6 @@ router.post(
   ctrlAdmin.upload
 );
 
+router.post("/", koaBody(), ctrlHome.postMail);
+
 module.exports = router;
