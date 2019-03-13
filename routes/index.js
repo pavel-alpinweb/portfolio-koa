@@ -10,5 +10,6 @@ router.get("/login", ctrlLogin.render);
 router.get("/admin", ctrlAdmin.render);
 
 router.post("/login", koaBody(), ctrlLogin.auth);
+router.post("/admin/skills", koaBody(), ctrlAdmin.updateSkills);
 
 module.exports = router;
