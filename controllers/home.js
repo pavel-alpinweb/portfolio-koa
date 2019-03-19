@@ -7,6 +7,26 @@ module.exports.render = async (ctx, next) => {
   ctx.render("pages/index", { products: works, skills: skills });
 };
 
+function sendMail(body) {
+  // инициализируем модуль для отправки писем и указываем данные из конфига
+  const transporter = nodemailer.createTransport(config.mail.smtp);
+  const mailOptions = {
+    from: `"${body.name}" <${body.email}>`,
+    to: config.mail.smtp.auth.user,
+    subject: config.mail.subject,
+    text: body.message.trim().slice(0, 500) + `\n Отправлено с: <${body.email}>`
+  };
+  return new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, function(error, info) {
+      // если есть ошибки при отправке - сообщаем об этом
+      if (error) {
+        reject(`При отправке письма произошла ошибка!: ${error}`);
+      }
+      resolve(`Письмо успешно отправлено: ${info}`);
+    });
+  });
+}
+
 module.exports.postMail = async (ctx, next) => {
   // требуем наличия имени, обратной почты и текста
   if (
@@ -21,30 +41,26 @@ module.exports.postMail = async (ctx, next) => {
       msg: `Все поля нужно заполнить!`
     });
   }
-  // инициализируем модуль для отправки писем и указываем данные из конфига
-  const transporter = nodemailer.createTransport(config.mail.smtp);
-  const mailOptions = {
-    from: `"${ctx.request.body.name}" <${ctx.request.body.email}>`,
-    to: config.mail.smtp.auth.user,
-    subject: config.mail.subject,
-    text:
-      ctx.request.body.message.trim().slice(0, 500) +
-      `\n Отправлено с: <${ctx.request.body.email}>`
-  };
+
   // отправляем почту
-  transporter.sendMail(mailOptions, function(error, info) {
-    // если есть ошибки при отправке - сообщаем об этом
-    if (error) {
-      return ctx.render("pages/index", {
-        products: works,
-        skills: skills,
-        msg: `При отправке письма произошла ошибка!: ${error}`
-      });
-    }
+
+  try {
+    const status = await sendMail(ctx.request.body);
+
+    const works = db.getState().works || [];
+    const skills = db.getState().skills || [];
     ctx.render("pages/index", {
       products: works,
       skills: skills,
-      msg: `Письмо успешно отправлено: ${error}`
+      msg: status
     });
-  });
+  } catch (status) {
+    const works = db.getState().works || [];
+    const skills = db.getState().skills || [];
+    ctx.render("pages/index", {
+      products: works,
+      skills: skills,
+      msg: status
+    });
+  }
 };
