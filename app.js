@@ -4,7 +4,7 @@ const static = require("koa-static");
 const session = require("koa-session");
 const Pug = require("koa-pug");
 const fs = require("fs");
-const flash = require("connect-flash");
+const flash = require("koa-better-flash");
 const pug = new Pug({
   viewPath: "./views",
   pretty: false,
