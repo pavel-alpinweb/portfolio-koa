@@ -1,10 +1,15 @@
 const db = require("../models/db");
 const config = require("../config/mail.json");
 const nodemailer = require("nodemailer");
+
 module.exports.render = async (ctx, next) => {
   const works = db.getState().works || [];
   const skills = db.getState().skills || [];
-  ctx.render("pages/index", { products: works, skills: skills });
+  ctx.render("pages/index", {
+    products: works,
+    skills: skills,
+    msg: stx.flash("info")
+  });
 };
 
 function sendMail(body) {
@@ -47,20 +52,10 @@ module.exports.postMail = async (ctx, next) => {
   try {
     const status = await sendMail(ctx.request.body);
 
-    const works = db.getState().works || [];
-    const skills = db.getState().skills || [];
-    ctx.render("pages/index", {
-      products: works,
-      skills: skills,
-      msg: status
-    });
+    ctx.flash("info", status);
+    ctx.redirect("/#status");
   } catch (status) {
-    const works = db.getState().works || [];
-    const skills = db.getState().skills || [];
-    ctx.render("pages/index", {
-      products: works,
-      skills: skills,
-      msg: status
-    });
+    ctx.flash("info", status);
+    ctx.redirect("/#status");
   }
 };
