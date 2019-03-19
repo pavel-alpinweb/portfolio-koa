@@ -1,9 +1,9 @@
 const db = require("../models/db");
 const config = require("../config/mail.json");
 const nodemailer = require("nodemailer");
-const works = db.getState().works || [];
-const skills = db.getState().skills || [];
 module.exports.render = async (ctx, next) => {
+  const works = db.getState().works || [];
+  const skills = db.getState().skills || [];
   ctx.render("pages/index", { products: works, skills: skills });
 };
 
