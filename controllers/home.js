@@ -8,7 +8,7 @@ module.exports.render = async (ctx, next) => {
   ctx.render("pages/index", {
     products: works,
     skills: skills,
-    msg: stx.flash("info")
+    msg: ctx.flash("info")
   });
 };
 
